@@ -22,7 +22,8 @@ import java.util.Map;
 
 public enum PinMode {
 	INPUT((byte)0),
-	OUTPUT((byte)1);
+	OUTPUT((byte)1),
+	INPUT_PULLUP((byte)2);
 
 	private final byte value;
 	
@@ -40,6 +41,7 @@ public enum PinMode {
 		map = new HashMap<Byte, PinMode>();
 		map.put((byte)0, PinMode.INPUT);
 		map.put((byte)1, PinMode.OUTPUT);
+		map.put((byte)2, PinMode.INPUT_PULLUP);
 	}
 	
 	public static PinMode fromValue(byte b) {

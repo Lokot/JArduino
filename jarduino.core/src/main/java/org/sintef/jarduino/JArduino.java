@@ -107,7 +107,7 @@ public abstract class JArduino extends AbstractJArduino {
             interruptRoutineExecutor.submit(new Runnable() {
                 public void run() {
 					try {
-						interrupt0();
+						interrupt1();
 					} catch (InvalidPinTypeException e) {
 						e.printStackTrace();
 					}
