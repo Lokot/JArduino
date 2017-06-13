@@ -337,7 +337,9 @@ public abstract class AbstractJArduino {
         // Messages from the JArduino device arrive here
         public void receiveMsg(byte[] msg) {
             JArduinoProtocolPacket p = (JArduinoProtocolPacket) JArduinoProtocol.createMessageFromPacket(msg);
-            p.acceptHandler(messageHandler);
+            if(p != null){
+            	p.acceptHandler(messageHandler);	
+            }
         }
 
         //*************************************************************************
