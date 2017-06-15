@@ -2,6 +2,7 @@ package org.sintef.jarduino.comm;
 
 import org.sintef.jarduino.observer.JArduinoClientObserver;
 import org.sintef.jarduino.observer.JArduinoObserver;
+import org.sintef.jarduino.observer.JArduinoSerial;
 import org.sintef.jarduino.observer.JArduinoSubject;
 
 import java.io.ByteArrayInputStream;
@@ -19,7 +20,7 @@ import java.util.Set;
  */
 
 @SuppressWarnings({"deprecation", "unused"})
-public class Udp4JArduino implements JArduinoClientObserver, JArduinoSubject, Runnable {
+public class Udp4JArduino implements JArduinoSerial<UdpConfiguration>, Runnable {
 
     public static final byte START_BYTE = 0x12;
     public static final byte STOP_BYTE = 0x13;
@@ -34,17 +35,7 @@ public class Udp4JArduino implements JArduinoClientObserver, JArduinoSubject, Ru
 
     private Thread reader = null;
 
-    public Udp4JArduino(String ip, Integer port) throws UnknownHostException, SocketException {
-        this.ip = ip;
-        this.port = port;
-        address = InetAddress.getByName(this.ip);
-        datagramSocket = new DatagramSocket();
-
-        reader = new Thread(this);
-        reader.start();
-    }
-
-	public void stop() {
+    public void stop() {
         reader.stop();
     }
 
@@ -142,4 +133,28 @@ public class Udp4JArduino implements JArduinoClientObserver, JArduinoSubject, Ru
         }
 
     }
+
+	@Override
+	public void setId(String ip) {
+		this.ip = ip;
+	}
+
+	@Override
+	public void setConf(UdpConfiguration conf) {
+		this.port = conf.getPort();
+	}
+
+	@Override
+	public void init() throws Exception {
+		address = InetAddress.getByName(this.ip);
+        datagramSocket = new DatagramSocket();
+
+        reader = new Thread(this);
+        reader.start();
+	}
+
+	@Override
+	public void close() {
+		stop();
+	}
 }

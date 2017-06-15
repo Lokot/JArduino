@@ -17,13 +17,13 @@
  */
 package org.sintef.jarduino.comm;
 
-import gnu.io.*;
-import org.sintef.jarduino.observer.JArduinoClientObserver;
-import org.sintef.jarduino.observer.JArduinoObserver;
-import org.sintef.jarduino.observer.JArduinoSubject;
-import org.sintef.jarduino.sim.InteractiveJArduinoDataControllerClient;
+import gnu.io.CommPort;
+import gnu.io.CommPortIdentifier;
+import gnu.io.PortInUseException;
+import gnu.io.SerialPort;
+import gnu.io.SerialPortEvent;
+import gnu.io.SerialPortEventListener;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +33,13 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Serial4JArduino implements JArduinoClientObserver, JArduinoSubject {
+import javax.swing.JOptionPane;
+
+import org.sintef.jarduino.observer.JArduinoObserver;
+import org.sintef.jarduino.observer.JArduinoSerial;
+import org.sintef.jarduino.sim.InteractiveJArduinoDataControllerClient;
+
+public class Serial4JArduino implements JArduinoSerial<SerialConfiguration> {
 
     static {
         System.out.println("Load RxTx");
@@ -72,23 +78,22 @@ public class Serial4JArduino implements JArduinoClientObserver, JArduinoSubject 
     protected SerialPort serialPort;
     protected InputStream in;
     protected OutputStream out;
+    protected SerialConfiguration conf = new SerialConfiguration(DEFAULT_BAUD);
+    
+    public Serial4JArduino() {
+    }
     
     public Serial4JArduino(String port) {
-    	this(port, new SerialConfiguration(DEFAULT_BAUD));
+    	this.port = port;
+    	init();
     }
     
     public Serial4JArduino(String port, SerialConfiguration conf) {
         this.port = port;
-        if (port == null) {
-            port = Serial4JArduino.selectSerialPort();
-        }
-        connect(port);
+        this.conf = conf;
+        init();
     }
     
-    void connect(String portName) {
-    	this.connect(portName,  new SerialConfiguration(DEFAULT_BAUD));
-    }
-
     void connect(String portName, SerialConfiguration conf) {
         registerPort(portName);
         try {
@@ -333,4 +338,24 @@ public class Serial4JArduino implements JArduinoClientObserver, JArduinoSubject 
             device.close();
         }
     }
+    
+    @Override
+	public void setId(String id) {
+		this.port = id;
+	}
+
+	@Override
+	public void setConf(SerialConfiguration conf) {
+		if (conf != null) {
+			this.conf = conf;
+		}
+	}
+
+	@Override
+	public void init() {
+		if (port == null) {
+            port = Serial4JArduino.selectSerialPort();
+        }
+		this.connect(port, conf);
+	}
 }

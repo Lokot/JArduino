@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sintef.jarduino.ProtocolConfiguration;
+import org.sintef.jarduino.jserialcomm.SerialConfiguration;
 import org.sintef.jarduino.observer.JArduinoClientObserver;
 import org.sintef.jarduino.observer.JArduinoObserver;
 import org.sintef.jarduino.observer.JArduinoSubject;
@@ -22,7 +23,7 @@ import com.hoho.android.usbserial.driver.*;
 
 //default baudrate 9600
 
-public class AndroidUsb4JArduino implements JArduinoClientObserver, JArduinoSubject, Runnable {
+public class AndroidUsb4JArduino implements JArduinoSerial<AndroidUsbProtocolConfiguration>, Runnable {
 	public static final byte START_BYTE = 0x12;
     public static final byte STOP_BYTE = 0x13;
     public static final byte ESCAPE_BYTE = 0x7D;
@@ -30,6 +31,7 @@ public class AndroidUsb4JArduino implements JArduinoClientObserver, JArduinoSubj
     Set<JArduinoObserver> observers = new HashSet<JArduinoObserver>();
     
 	UsbSerialDriver usbserial;
+	private AndroidUsbProtocolConfiguration configuration;
     private Thread reader = null;
 
 	public AndroidUsb4JArduino(AndroidUsbProtocolConfiguration configuration) {
@@ -160,4 +162,39 @@ public class AndroidUsb4JArduino implements JArduinoClientObserver, JArduinoSubj
 		}
         reader.stop();
     }
+	
+	@Override
+	public void close() {
+		stop();
+	}
+	
+	@Override
+	public void setId(String id) {
+		// not used
+	}
+
+	@Override
+	public void setConf(AndroidUsbProtocolConfiguration conf) {
+		this.configuration = conf;
+	}
+
+	@Override
+	public void init() {
+		// Get UsbManager from Android.
+		Context context = configuration.getContext();
+		UsbManager manager = (UsbManager)context.getSystemService(Context.USB_SERVICE);
+		// Find the first available driver.
+		usbserial = UsbSerialProber.acquire(manager);
+		try {
+			if(usbserial != null){
+				usbserial.open();
+				usbserial.setBaudRate(9600);
+				reader = new Thread(this);
+				reader.start();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

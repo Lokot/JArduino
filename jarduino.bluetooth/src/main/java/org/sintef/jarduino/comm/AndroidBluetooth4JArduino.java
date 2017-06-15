@@ -17,20 +17,19 @@
  */
 package org.sintef.jarduino.comm;
 
-import android.bluetooth.BluetoothSocket;
-import org.sintef.jarduino.AndroidBluetoothConfiguration;
-import org.sintef.jarduino.ProtocolConfiguration;
-import org.sintef.jarduino.observer.JArduinoClientObserver;
-import org.sintef.jarduino.observer.JArduinoObserver;
-import org.sintef.jarduino.observer.JArduinoSubject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AndroidBluetooth4JArduino implements JArduinoClientObserver, JArduinoSubject, Runnable {
+import org.sintef.jarduino.AndroidBluetoothConfiguration;
+import org.sintef.jarduino.observer.JArduinoObserver;
+import org.sintef.jarduino.observer.JArduinoSerial;
+
+import android.bluetooth.BluetoothSocket;
+
+public class AndroidBluetooth4JArduino implements JArduinoSerial<AndroidBluetoothConfiguration>, Runnable {
 
     public static final byte START_BYTE = 0x12;
     public static final byte STOP_BYTE = 0x13;
@@ -40,16 +39,7 @@ public class AndroidBluetooth4JArduino implements JArduinoClientObserver, JArdui
     protected OutputStream out;
     private Thread reader = null;
     Set<JArduinoObserver> observers = new HashSet<JArduinoObserver>();
-
-    public AndroidBluetooth4JArduino(AndroidBluetoothConfiguration myConf) {
-        setAndroidBluetoothSocket(myConf.getmSocket());
-        reader = new Thread(this);
-        reader.start();
-    }
-
-    public AndroidBluetooth4JArduino(ProtocolConfiguration myConf) {
-        this(((AndroidBluetoothConfiguration)myConf));
-    }
+    private AndroidBluetoothConfiguration conf;
 
     public void setAndroidBluetoothSocket(BluetoothSocket socket){
         mSocket = socket;
@@ -162,4 +152,21 @@ public class AndroidBluetooth4JArduino implements JArduinoClientObserver, JArdui
             e.printStackTrace();
         }
     }
+
+	@Override
+	public void setId(String id) {
+		
+	}
+
+	@Override
+	public void setConf(AndroidBluetoothConfiguration conf) {
+		this.conf = conf;
+	}
+
+	@Override
+	public void init() throws Exception {
+		setAndroidBluetoothSocket(conf.getmSocket());
+        reader = new Thread(this);
+        reader.start();
+	}
 }
