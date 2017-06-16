@@ -54,11 +54,10 @@ public abstract class AbstractJArduino {
 				messageHandler = new JArduinoDriverMessageHandler();
 				serial.register(messageHandler);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} else {
-			// TODO throw Exception
+			throw new RuntimeException("No find JArduinoSerial implemenation.");
 		}
 	}
 

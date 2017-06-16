@@ -38,7 +38,7 @@
     <dependencies>
         <dependency>
             <groupId>org.sintef.jarduino</groupId>
-            <artifactId>jarduino.sensorread.protocol.addon</artifactId>
+            <artifactId>org.sintef.jarduino.sensorread.protocol.addon</artifactId>
             <version>${jarduino.version}</version>
         </dependency>
         <dependency>
