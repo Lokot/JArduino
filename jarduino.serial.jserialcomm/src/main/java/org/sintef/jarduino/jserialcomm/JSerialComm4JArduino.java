@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.observer.JArduinoObserver;
 import org.sintef.jarduino.observer.JArduinoSerial;
 
@@ -30,8 +31,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
-public class JSerialComm4JArduino implements
-		JArduinoSerial<JSerialCommConfiguration> {
+public class JSerialComm4JArduino implements JArduinoSerial<JSerialCommConfiguration> {
 
 	public static final byte START_BYTE = 0x12;
 	public static final byte STOP_BYTE = 0x13;
@@ -41,26 +41,29 @@ public class JSerialComm4JArduino implements
 	protected SerialPort serialPort;
 	protected InputStream in;
 	protected OutputStream out;
-	protected JSerialCommConfiguration conf = new JSerialCommConfiguration(
-			DEFAULT_BAUD);
+	protected JSerialCommConfiguration conf = new JSerialCommConfiguration(DEFAULT_BAUD);
 
-	void connect(String portName, JSerialCommConfiguration conf) {
+	void connect(String portName, JSerialCommConfiguration conf) throws JArduinoConnectionException {
 		// registerPort(portName);
 		try {
 			serialPort = SerialPort.getCommPort(portName);
 			serialPort.openPort();
 			// serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING,
 			// 100, 0);
-			serialPort.setComPortParameters(conf.getBaudRate(), 8,
-					SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
+			serialPort.setComPortParameters(conf.getBaudRate(), 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
 
 			in = serialPort.getInputStream();
 			out = serialPort.getOutputStream();
+			if (in == null || out == null) {
+				throw new JArduinoConnectionException("Not correct Serrial Port (" + portName + ")");
+			}
 
 			serialPort.addDataListener(new SerialReader());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (e instanceof JArduinoConnectionException)
+				throw e;
+			throw new JArduinoConnectionException("Error connecting to Serrial Port (" + portName + ")", e);
 		}
 	}
 
@@ -79,9 +82,10 @@ public class JSerialComm4JArduino implements
 		}
 	}
 
-	/* ***********************************************************************
-	 * Implementation of the CoffeeSensorClientObserver interface. The
-	 * receiveMsg method gets called with packets to send.
+	/*
+	 * ***********************************************************************
+	 * Implementation of the CoffeeSensorClientObserver interface. The receiveMsg
+	 * method gets called with packets to send.
 	 * ***********************************************************************
 	 */
 	@Override
@@ -89,7 +93,8 @@ public class JSerialComm4JArduino implements
 		sendData(msg);
 	}
 
-	/* ***********************************************************************
+	/*
+	 * ***********************************************************************
 	 * Implementation of the CoffeeSensorSubject interface. The CoffeeSensor
 	 * Observers get notified for each incoming packet.
 	 * ***********************************************************************
@@ -106,7 +111,8 @@ public class JSerialComm4JArduino implements
 		observers.remove(observer);
 	}
 
-	/* ***********************************************************************
+	/*
+	 * ***********************************************************************
 	 * Serial Port data send operation
 	 * ***********************************************************************
 	 */
@@ -117,8 +123,7 @@ public class JSerialComm4JArduino implements
 			// send data
 			for (int i = 0; i < payload.length; i++) {
 				// escape special bytes
-				if (payload[i] == START_BYTE || payload[i] == STOP_BYTE
-						|| payload[i] == ESCAPE_BYTE) {
+				if (payload[i] == START_BYTE || payload[i] == STOP_BYTE || payload[i] == ESCAPE_BYTE) {
 					out.write((int) ESCAPE_BYTE);
 				}
 				out.write((int) payload[i]);
@@ -131,7 +136,8 @@ public class JSerialComm4JArduino implements
 		}
 	}
 
-	/* ***********************************************************************
+	/*
+	 * ***********************************************************************
 	 * Serial Port Listener - reads packets from the serial line and notifies
 	 * listeners of incoming packets
 	 * ***********************************************************************
@@ -210,7 +216,7 @@ public class JSerialComm4JArduino implements
 	}
 
 	@Override
-	public void init() {
+	public void init() throws JArduinoConnectionException {
 		this.connect(port, conf);
 	}
 

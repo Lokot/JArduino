@@ -29,9 +29,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import org.sintef.jarduino.DigitalPin;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
@@ -46,7 +46,7 @@ public class ToneKeyKeyboard extends JArduino {
     private Timeout timeout;
     private JFrame frame;
 
-    public ToneKeyKeyboard(String port) {
+    public ToneKeyKeyboard(String port) throws JArduinoConnectionException {
         super(port);
         timer = new Timer();
 
@@ -88,7 +88,7 @@ public class ToneKeyKeyboard extends JArduino {
 
     //Starts the application
     //Remember to set the correct com port
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

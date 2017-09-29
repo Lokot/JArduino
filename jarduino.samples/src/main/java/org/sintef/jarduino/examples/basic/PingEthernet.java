@@ -1,10 +1,11 @@
 package org.sintef.jarduino.examples.basic;
 
-import org.sintef.jarduino.JArduino;
-import org.sintef.jarduino.JArduinoCom;
-
 import java.net.SocketException;
 import java.net.UnknownHostException;
+
+import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoCom;
+import org.sintef.jarduino.JArduinoConnectionException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +15,7 @@ import java.net.UnknownHostException;
  */
 public class PingEthernet extends JArduino {
 
-    public PingEthernet(String ip, JArduinoCom comModel) throws SocketException, UnknownHostException {
+    public PingEthernet(String ip, JArduinoCom comModel) throws SocketException, UnknownHostException, JArduinoConnectionException {
         super(ip, comModel);
     }
 
@@ -39,7 +40,7 @@ public class PingEthernet extends JArduino {
         delay(1000); // wait for a second
     }
 
-    public static void main(String[] args) throws SocketException, UnknownHostException {
+    public static void main(String[] args) throws SocketException, UnknownHostException, JArduinoConnectionException {
         String ip;
         if (args.length == 1) {
             ip = args[0];

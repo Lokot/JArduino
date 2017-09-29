@@ -20,6 +20,7 @@ package org.sintef.jarduino.examples.digital;
 import org.sintef.jarduino.DigitalState;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
@@ -32,7 +33,7 @@ public class Button extends JArduino {
     // variable for reading the pushbutton status
     DigitalState buttonState = LOW;
 
-    public Button(String port) {
+    public Button(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -61,7 +62,7 @@ public class Button extends JArduino {
         
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

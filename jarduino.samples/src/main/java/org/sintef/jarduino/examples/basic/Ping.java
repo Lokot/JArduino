@@ -18,6 +18,7 @@
 package org.sintef.jarduino.examples.basic;
 
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
 /*
@@ -26,7 +27,7 @@ This example pings the arduino and outputs its response time
 
 public class Ping extends JArduino {
 
-    public Ping(String port) {
+    public Ping(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -51,7 +52,7 @@ public class Ping extends JArduino {
         delay(1000); // wait for a second
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

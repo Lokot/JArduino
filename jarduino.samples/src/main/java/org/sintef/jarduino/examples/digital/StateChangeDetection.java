@@ -20,6 +20,7 @@ package org.sintef.jarduino.examples.digital;
 import org.sintef.jarduino.DigitalState;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
@@ -36,7 +37,7 @@ public class StateChangeDetection extends JArduino {
     // previous state of the button
     DigitalState lastButtonState = LOW;
 
-    public StateChangeDetection(String port) {
+    public StateChangeDetection(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -85,7 +86,7 @@ public class StateChangeDetection extends JArduino {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

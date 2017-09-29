@@ -17,15 +17,14 @@
  */
 package org.sintef.jarduino.examples.digital;
 
-import org.sintef.jarduino.AnalogPin;
-import org.sintef.jarduino.DigitalPin;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
 public class TonePitchFollower extends JArduino {
 
-    public TonePitchFollower(String port) {
+    public TonePitchFollower(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -48,7 +47,7 @@ public class TonePitchFollower extends JArduino {
         tone(p8, (short) thisPitch, (short) 10);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

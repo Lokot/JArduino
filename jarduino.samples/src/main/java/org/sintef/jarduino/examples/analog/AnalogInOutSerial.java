@@ -17,10 +17,9 @@
  */
 package org.sintef.jarduino.examples.analog;
 
-import org.sintef.jarduino.AnalogPin;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
-import org.sintef.jarduino.PWMPin;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
@@ -56,7 +55,7 @@ public class AnalogInOutSerial extends JArduino {
     int sensorValue = 0;        // value read from the pot
     int outputValue = 0;        // value output to the PWM (analog out)
 
-    public AnalogInOutSerial(String port) {
+    public AnalogInOutSerial(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -85,7 +84,7 @@ public class AnalogInOutSerial extends JArduino {
         delay(10);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
 
         String serialPort;
         if (args.length == 1) {

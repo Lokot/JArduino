@@ -19,7 +19,7 @@ public class ArduinoEmulator {
 	protected OutputStream out;
 
 	public ArduinoEmulator() {
-		serialPort = SerialPort.getCommPort("COM5");
+		serialPort = SerialPort.getCommPort("COM7");
 		serialPort.openPort();
 		// com5.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 100,
 		// 0);

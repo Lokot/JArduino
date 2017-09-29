@@ -3,13 +3,14 @@ package org.sintef.jarduino.examples.sensorread;
 import org.sintef.jarduino.DigitalPin;
 import org.sintef.jarduino.DigitalState;
 import org.sintef.jarduino.InvalidPinTypeException;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.JArduinoDSensors;
 
 public class DigitalPinStateNotifier extends JArduinoDSensors {
 
 	private DigitalPin inputPin = DigitalPin.PIN_13;
 	
-	public DigitalPinStateNotifier(String port) {
+	public DigitalPinStateNotifier(String port) throws JArduinoConnectionException {
 		super(port);
 	}
 
@@ -38,7 +39,7 @@ public class DigitalPinStateNotifier extends JArduinoDSensors {
 
 	}
 
-	public static void main(String[] args) throws InvalidPinTypeException {
+	public static void main(String[] args) throws Exception {
 		JArduinoDSensors arduino = new Dht22Reader("COM6");
 		arduino.runArduinoProcess();
 	}

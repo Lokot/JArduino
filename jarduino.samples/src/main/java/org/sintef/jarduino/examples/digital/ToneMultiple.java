@@ -19,6 +19,7 @@ package org.sintef.jarduino.examples.digital;
 
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.Pitches;
 import org.sintef.jarduino.comm.Serial4JArduino;
@@ -29,7 +30,7 @@ public class ToneMultiple extends JArduino implements Pitches {
     private Pin speakerTwo = p7;
     private Pin speakerThree = p8;
 
-    public ToneMultiple(String port) {
+    public ToneMultiple(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -59,7 +60,7 @@ public class ToneMultiple extends JArduino implements Pitches {
         
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

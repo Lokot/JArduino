@@ -11,13 +11,13 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.sintef.jarduino.AnalogPin;
-import org.sintef.jarduino.InvalidPinTypeException;
-import org.sintef.jarduino.JArduino;
-import org.sintef.jarduino.Pin;
-import org.sintef.jarduino.comm.Serial4JArduino;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+import org.sintef.jarduino.InvalidPinTypeException;
+import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
+import org.sintef.jarduino.Pin;
+import org.sintef.jarduino.comm.Serial4JArduino;
 
 public class TemperatureGrapher extends JArduino{
 
@@ -38,7 +38,7 @@ public class TemperatureGrapher extends JArduino{
 	private XYDataset dataset;
 	
 	
-	public TemperatureGrapher(String port) {
+	public TemperatureGrapher(String port) throws JArduinoConnectionException {
 		super(port);
 	}
 
@@ -94,7 +94,7 @@ public class TemperatureGrapher extends JArduino{
 
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JArduinoConnectionException {
 
         String serialPort;
         if (args.length == 1) {

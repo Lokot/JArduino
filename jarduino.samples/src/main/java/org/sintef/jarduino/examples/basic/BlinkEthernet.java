@@ -17,8 +17,6 @@
  */
 package org.sintef.jarduino.examples.basic;
 
-import org.sintef.jarduino.*;
-
 import java.net.SocketException;
 import java.net.UnknownHostException;
 /*
@@ -28,9 +26,14 @@ Turns on an LED on for one second, then off for one second, repeatedly.
 This example code is in the public domain.
  */
 
+import org.sintef.jarduino.InvalidPinTypeException;
+import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoCom;
+import org.sintef.jarduino.JArduinoConnectionException;
+
 public class BlinkEthernet extends JArduino {
 
-    public BlinkEthernet(String ip, JArduinoCom ethernet) {
+    public BlinkEthernet(String ip, JArduinoCom ethernet) throws JArduinoConnectionException {
         super(ip, ethernet);
     }
 
@@ -51,7 +54,7 @@ public class BlinkEthernet extends JArduino {
         delay(1000); // wait for a second
     }
 
-    public static void main(String[] args) throws SocketException, UnknownHostException {
+    public static void main(String[] args) throws SocketException, UnknownHostException, JArduinoConnectionException {
         String ip;
         if (args.length == 1) {
             ip = args[0];

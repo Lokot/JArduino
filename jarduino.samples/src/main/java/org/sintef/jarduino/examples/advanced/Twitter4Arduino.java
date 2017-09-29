@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.sintef.jarduino.DigitalPin;
 import org.sintef.jarduino.DigitalState;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.PinMode;
 
@@ -53,7 +53,7 @@ public class Twitter4Arduino extends JArduino{
 	private String userName;
 	
 	public Twitter4Arduino(String port, String customerKey, String customerSecret, 
-			String accessKey, String accessSecret, String userName) {
+			String accessKey, String accessSecret, String userName) throws JArduinoConnectionException {
 		super(port);
 		this.userName = userName;
 		this.twitter = new TwitterFactory().getInstance();
@@ -110,8 +110,9 @@ public class Twitter4Arduino extends JArduino{
 	/**
 	 * Here you can set all your variables before launching 
 	 * your application
+	 * @throws JArduinoConnectionException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JArduinoConnectionException {
 		String customerKey = "your consumer key";
 		String customerSecret = "your consumer secret";
 		String accessKey = "your access key";

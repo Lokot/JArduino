@@ -27,37 +27,38 @@ public abstract class JArduinoDSensors extends JArduino {
 	private boolean sensorRead_result_available;
 	private final Object sensorReadMonitor = "sensorReadMonitor";
 
-	public JArduinoDSensors() {
+	public JArduinoDSensors() throws JArduinoConnectionException {
+		super();
 		init();
 	}
 
-	public JArduinoDSensors(JArduinoCom com, ProtocolConfiguration prot) {
+	public JArduinoDSensors(JArduinoCom com, ProtocolConfiguration prot) throws JArduinoConnectionException {
 		super(com, prot);
 		init();
 	}
 
-	public JArduinoDSensors(JArduinoCom com) {
+	public JArduinoDSensors(JArduinoCom com) throws JArduinoConnectionException {
 		super(com);
 		init();
 	}
 
 	public JArduinoDSensors(String ID, JArduinoCom com,
-			ProtocolConfiguration prot) {
+			ProtocolConfiguration prot) throws JArduinoConnectionException {
 		super(ID, com, prot);
 		init();
 	}
 
-	public JArduinoDSensors(String ID, JArduinoCom com) {
+	public JArduinoDSensors(String ID, JArduinoCom com) throws JArduinoConnectionException {
 		super(ID, com);
 		init();
 	}
 
-	public JArduinoDSensors(String id, ProtocolConfiguration prot) {
+	public JArduinoDSensors(String id, ProtocolConfiguration prot) throws JArduinoConnectionException {
 		super(id, prot);
 		init();
 	}
 
-	public JArduinoDSensors(String id) {
+	public JArduinoDSensors(String id) throws JArduinoConnectionException {
 		super(id);
 		init();
 	}

@@ -19,6 +19,7 @@ package org.sintef.jarduino.examples.basic;
 
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.comm.Serial4JArduino;
 /*
 Blink
@@ -29,7 +30,7 @@ This example code is in the public domain.
 
 public class Blink extends JArduino {
 
-    public Blink(String port) {
+    public Blink(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -51,7 +52,7 @@ public class Blink extends JArduino {
         
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

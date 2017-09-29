@@ -16,6 +16,7 @@
  */
 package org.sintef.jarduino.observer;
 
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.ProtocolConfiguration;
 
 public interface JArduinoSerial<T extends ProtocolConfiguration> extends JArduinoClientObserver, JArduinoSubject {
@@ -24,7 +25,7 @@ public interface JArduinoSerial<T extends ProtocolConfiguration> extends JArduin
 	
 	public void setConf(T conf);
 	
-	public void init() throws Exception;
+	public void init() throws JArduinoConnectionException;
 	
 	public void close();
 }

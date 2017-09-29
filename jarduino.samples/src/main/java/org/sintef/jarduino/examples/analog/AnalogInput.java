@@ -17,13 +17,10 @@
  */
 package org.sintef.jarduino.examples.analog;
 
-import org.sintef.jarduino.AnalogPin;
-import org.sintef.jarduino.DigitalPin;
-import org.sintef.jarduino.DigitalState;
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pin;
-import org.sintef.jarduino.PinMode;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
 public class AnalogInput extends JArduino {
@@ -34,7 +31,7 @@ public class AnalogInput extends JArduino {
     final Pin ledPin = p9; // Analog output pin that the LED is attached to
     int sensorValue = 0;        // value read from the pot
 
-    public AnalogInput(String port) {
+    public AnalogInput(String port) throws JArduinoConnectionException {
         super(port);
     }
 
@@ -57,7 +54,7 @@ public class AnalogInput extends JArduino {
         delay(sensorValue);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
         String serialPort;
         if (args.length == 1) {
             serialPort = args[0];

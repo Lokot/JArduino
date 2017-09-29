@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sintef.jarduino.AndroidBluetoothConfiguration;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.observer.JArduinoObserver;
 import org.sintef.jarduino.observer.JArduinoSerial;
 
@@ -164,9 +165,10 @@ public class AndroidBluetooth4JArduino implements JArduinoSerial<AndroidBluetoot
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() throws JArduinoConnectionException {
 		setAndroidBluetoothSocket(conf.getmSocket());
-        reader = new Thread(this);
-        reader.start();
+		reader = new Thread(this);
+		reader.start();
 	}
+
 }

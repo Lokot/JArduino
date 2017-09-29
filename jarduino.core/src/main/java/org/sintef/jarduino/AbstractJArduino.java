@@ -37,25 +37,19 @@ public abstract class AbstractJArduino {
 	protected JArduinoDriverMessageHandler messageHandler;
 	protected JArduinoSerial serial;
 
-	public AbstractJArduino(String ID, JArduinoCom com,
-			ProtocolConfiguration conf) {
-		Iterator<JArduinoSerial> iterator = ServiceLoader.load(
-				JArduinoSerial.class).iterator();
+	public AbstractJArduino(String ID, JArduinoCom com, ProtocolConfiguration conf) throws JArduinoConnectionException {
+		Iterator<JArduinoSerial> iterator = ServiceLoader.load(JArduinoSerial.class).iterator();
 		if (iterator.hasNext()) {
-			try {
-				serial = iterator.next();
-				serial.setId(ID);
-				if (com.equals(JArduinoCom.Ethernet)) {
-					serial.setConf(new UdpConfiguration(4000));
-				} else {
-					serial.setConf(conf);
-				}
-				serial.init();
-				messageHandler = new JArduinoDriverMessageHandler();
-				serial.register(messageHandler);
-			} catch (Exception e) {
-				e.printStackTrace();
+			serial = iterator.next();
+			serial.setId(ID);
+			if (com.equals(JArduinoCom.Ethernet)) {
+				serial.setConf(new UdpConfiguration(4000));
+			} else {
+				serial.setConf(conf);
 			}
+			serial.init();
+			messageHandler = new JArduinoDriverMessageHandler();
+			serial.register(messageHandler);
 		} else {
 			throw new RuntimeException("No find JArduinoSerial implemenation.");
 		}
@@ -84,8 +78,7 @@ public abstract class AbstractJArduino {
 		serial.receiveMsg(p.getPacket());
 	}
 
-	public void digitalWrite(Pin pin, DigitalState value)
-			throws InvalidPinTypeException {
+	public void digitalWrite(Pin pin, DigitalState value) throws InvalidPinTypeException {
 		if (!pin.isDigital())
 			throw new InvalidPinTypeException();
 		digitalWrite(DigitalPin.fromValue(pin.getValue()), value);
@@ -114,14 +107,12 @@ public abstract class AbstractJArduino {
 
 	public void tone(DigitalPin pin, short frequency, short duration) {
 		// Create message using the factory
-		FixedSizePacket p = JArduinoProtocol.createTone(pin, frequency,
-				duration);
+		FixedSizePacket p = JArduinoProtocol.createTone(pin, frequency, duration);
 		// Send the message on the serial line
 		serial.receiveMsg(p.getPacket());
 	}
 
-	public void tone(Pin pin, short frequency, short duration)
-			throws InvalidPinTypeException {
+	public void tone(Pin pin, short frequency, short duration) throws InvalidPinTypeException {
 		if (!pin.isDigital())
 			throw new InvalidPinTypeException();
 		tone(DigitalPin.fromValue(pin.getValue()), frequency, duration);
@@ -142,14 +133,12 @@ public abstract class AbstractJArduino {
 
 	public void attachInterrupt(InterruptPin interrupt, InterruptTrigger mode) {
 		// Create message using the factory
-		FixedSizePacket p = JArduinoProtocol.createAttachInterrupt(interrupt,
-				mode);
+		FixedSizePacket p = JArduinoProtocol.createAttachInterrupt(interrupt, mode);
 		// Send the message on the serial line
 		serial.receiveMsg(p.getPacket());
 	}
 
-	public void attachInterrupt(Pin pin, InterruptTrigger mode)
-			throws InvalidPinTypeException {
+	public void attachInterrupt(Pin pin, InterruptTrigger mode) throws InvalidPinTypeException {
 		if (!pin.isInterrupt())
 			throw new InvalidPinTypeException();
 		attachInterrupt(InterruptPin.fromValue(pin.getValue()), mode);
@@ -206,8 +195,7 @@ public abstract class AbstractJArduino {
 	public boolean eeprom_sync_write(short address, byte value) {
 		eeprom_sync_write_ack_available = false;
 		// Create message using the factory
-		FixedSizePacket p = JArduinoProtocol.createEeprom_sync_write(address,
-				value);
+		FixedSizePacket p = JArduinoProtocol.createEeprom_sync_write(address, value);
 		// Create message using the factory
 		serial.receiveMsg(p.getPacket());
 		try {
@@ -249,8 +237,7 @@ public abstract class AbstractJArduino {
 		// throw new
 		// Error("JArduino: Timeout waiting for the result of digitalRead");
 		// The error message alternative
-		System.err
-				.println("JArduino: Timeout waiting for the result of digitalRead");
+		System.err.println("JArduino: Timeout waiting for the result of digitalRead");
 		return null;
 	}
 
@@ -283,8 +270,7 @@ public abstract class AbstractJArduino {
 		// throw new
 		// Error("JArduino: Timeout waiting for the result of analogRead");
 		// The error message alternative
-		System.err
-				.println("JArduino: Timeout waiting for the result of analogRead");
+		System.err.println("JArduino: Timeout waiting for the result of analogRead");
 		return 0;
 
 	}
@@ -318,14 +304,12 @@ public abstract class AbstractJArduino {
 		// throw new
 		// Error("JArduino: Timeout waiting for the result of pulseIn");
 		// The error message alternative
-		System.err
-				.println("JArduino: Timeout waiting for the result of pulseIn");
+		System.err.println("JArduino: Timeout waiting for the result of pulseIn");
 		return 0;
 
 	}
 
-	public int pulseIn(Pin pin, DigitalState state, long timeout)
-			throws InvalidPinTypeException {
+	public int pulseIn(Pin pin, DigitalState state, long timeout) throws InvalidPinTypeException {
 		if (!pin.isDigital())
 			throw new InvalidPinTypeException();
 		return pulseIn(DigitalPin.fromValue(pin.getValue()), state, timeout);
@@ -354,34 +338,29 @@ public abstract class AbstractJArduino {
 		// throw new
 		// Error("JArduino: Timeout waiting for the result of eeprom_read");
 		// The error message alternative
-		System.err
-				.println("JArduino: Timeout waiting for the result of eeprom_read");
+		System.err.println("JArduino: Timeout waiting for the result of eeprom_read");
 		return 0;
 
 	}
 
-	/* ******************************************************
-	 * Handlers for the incoming messages
-	 * ******************************************************
+	/*
+	 * ****************************************************** Handlers for the
+	 * incoming messages ******************************************************
 	 */
 
 	/**
-	 * Implement this method to handle the incoming message
-	 * interruptNotification
+	 * Implement this method to handle the incoming message interruptNotification
 	 */
 	protected abstract void receiveInterruptNotification(InterruptPin interrupt);
 
-	protected abstract void receiveInterruptNotification(Pin interrupt)
-			throws InvalidPinTypeException;
+	protected abstract void receiveInterruptNotification(Pin interrupt) throws InvalidPinTypeException;
 
-	private class JArduinoDriverMessageHandler extends JArduinoMessageHandler
-			implements JArduinoObserver {
+	private class JArduinoDriverMessageHandler extends JArduinoMessageHandler implements JArduinoObserver {
 
 		@Override
 		// Messages from the JArduino device arrive here
 		public void receiveMsg(byte[] msg) {
-			JArduinoProtocolPacket p = (JArduinoProtocolPacket) JArduinoProtocol
-					.createMessageFromPacket(msg);
+			JArduinoProtocolPacket p = (JArduinoProtocolPacket) JArduinoProtocol.createMessageFromPacket(msg);
 			if (p != null) {
 				p.acceptHandler(messageHandler);
 			}

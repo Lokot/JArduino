@@ -21,15 +21,6 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.sintef.jarduino.DigitalPin;
-import org.sintef.jarduino.DigitalState;
-import org.sintef.jarduino.InterruptTrigger;
-import org.sintef.jarduino.InvalidPinTypeException;
-import org.sintef.jarduino.JArduino;
-import org.sintef.jarduino.Pin;
-import org.sintef.jarduino.PinMode;
-import org.sintef.jarduino.InterruptPin;
-
 /**
  * This class is largely inspired by
  * http://www.andrejkoelewijn.com/wp/2008/12/30/using-google-talk-from-java-example/
@@ -43,6 +34,11 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.sintef.jarduino.InterruptTrigger;
+import org.sintef.jarduino.InvalidPinTypeException;
+import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
+import org.sintef.jarduino.Pin;
 
 /**
  * Run the main according to the instructions and ask your friends to send you
@@ -59,11 +55,11 @@ public class GTalkAlert extends JArduino {
     private Timer timer;
     private XMPPConnection connection;
 
-    public GTalkAlert(String port) {
+    public GTalkAlert(String port) throws JArduinoConnectionException {
         super(port);
     }
 
-    public GTalkAlert(String port, String user, String pwd, String otherUser,  Pin led, Pin button) throws InvalidPinTypeException {
+    public GTalkAlert(String port, String user, String pwd, String otherUser,  Pin led, Pin button) throws InvalidPinTypeException, JArduinoConnectionException {
         this(port);
 
         this.led = led;
@@ -178,8 +174,9 @@ public class GTalkAlert extends JArduino {
      * your google account. The connection to your Google account is entirely
      * delegated to the Smack API
      * @throws InvalidPinTypeException 
+     * @throws JArduinoConnectionException 
      */
-    public static void main(String[] args) throws InvalidPinTypeException {
+    public static void main(String[] args) throws InvalidPinTypeException, JArduinoConnectionException {
         String otherName = "your.friend@gmail.com";
         String userName = "first.last@gmail.com";
         String password = "yourPassword";

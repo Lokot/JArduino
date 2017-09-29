@@ -19,13 +19,14 @@ package org.sintef.jarduino.examples.digital;
 
 import org.sintef.jarduino.InvalidPinTypeException;
 import org.sintef.jarduino.JArduino;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.Pitches;
 import org.sintef.jarduino.comm.Serial4JArduino;
 
 
 public class ToneMelody extends JArduino implements Pitches {
 
-    public ToneMelody(String port) {
+    public ToneMelody(String port) throws JArduinoConnectionException {
         super(port);
     }
     short melody[] = {NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4};
@@ -53,7 +54,7 @@ public class ToneMelody extends JArduino implements Pitches {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JArduinoConnectionException {
 
         String serialPort;
         if (args.length == 1) {

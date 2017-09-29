@@ -13,7 +13,7 @@ class BlinkAndAnalog extends JArduino {
     final AnalogPin analogInPin = AnalogPin.A_0;
     int sensorValue = 0;        // value read from the pot
 
-    public BlinkAndAnalog(BluetoothSocket socket) {
+    public BlinkAndAnalog(BluetoothSocket socket) throws JArduinoConnectionException {
         super(JArduinoCom.AndroidBluetooth, new AndroidBluetoothConfiguration(socket));
     }
 

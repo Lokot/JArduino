@@ -1,6 +1,7 @@
 package org.sintef.jarduino.examples.sensorread;
 
 import org.sintef.jarduino.InvalidPinTypeException;
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.JArduinoDSensors;
 import org.sintef.jarduino.Pin;
 import org.sintef.jarduino.examples.sensorread.sensors.Dht22Params;
@@ -10,7 +11,7 @@ public class Dht22Reader extends JArduinoDSensors {
 
 	private final Pin dhtPin = p2;
 
-	public Dht22Reader(String port) {
+	public Dht22Reader(String port) throws JArduinoConnectionException {
 		super(port);
 	}
 
@@ -29,8 +30,8 @@ public class Dht22Reader extends JArduinoDSensors {
 		delay(1000);
 	}
 
-	public static void main(String[] args) throws InvalidPinTypeException {
-		JArduinoDSensors arduino = new Dht22Reader("COM6");
+	public static void main(String[] args) throws Exception {
+		JArduinoDSensors arduino = new Dht22Reader("COM9");
 		arduino.runArduinoProcess();
 	}
 }
