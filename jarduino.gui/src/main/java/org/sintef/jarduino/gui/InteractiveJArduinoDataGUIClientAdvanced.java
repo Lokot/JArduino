@@ -30,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
 
+import org.sintef.jarduino.JArduinoConnectionException;
 import org.sintef.jarduino.comm.Serial4JArduino;
 import org.sintef.jarduino.gui.dialogs.CardChooserDialog;
 import org.sintef.jarduino.gui.panels.APanel;
@@ -170,9 +171,13 @@ public class InteractiveJArduinoDataGUIClientAdvanced {
 				String serialPort = Serial4JArduino.selectSerialPort();
 				if(serialPort != null){
 					ijadcca.unregisterAll();
-					Serial4JArduino t = new Serial4JArduino(serialPort);
-					t.register(ijadcca);
-					ijadcca.register(t);
+					try {
+						Serial4JArduino t = new Serial4JArduino(serialPort);
+						t.register(ijadcca);
+						ijadcca.register(t);
+					} catch (JArduinoConnectionException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 			if(e.getSource() == about){

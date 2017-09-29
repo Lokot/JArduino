@@ -31,7 +31,7 @@ public class Dht22Reader extends JArduinoDSensors {
 	}
 
 	public static void main(String[] args) throws Exception {
-		JArduinoDSensors arduino = new Dht22Reader("COM9");
+		JArduinoDSensors arduino = new Dht22Reader("COM11");
 		arduino.runArduinoProcess();
 	}
 }
